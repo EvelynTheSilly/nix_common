@@ -1,12 +1,7 @@
-{
-  self,
-  inputs,
-  ...
-}: {
-  flake.packages.x86_64-linux.helix = let
-    pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-  in
-    inputs.wrapper-modules.wrappers.helix.wrap {
+{inputs, ...}: {
+  imports = [inputs.flake-parts.flakeModules.nixpkgs];
+  perSystem = {pkgs, ...}: {
+    packages.helix = inputs.wrapper-modules.wrappers.helix.wrap {
       inherit pkgs;
       package = pkgs.evil-helix;
       settings = {
@@ -21,4 +16,5 @@
         };
       };
     };
+  };
 }
