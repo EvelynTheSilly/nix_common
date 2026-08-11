@@ -5,7 +5,20 @@
 }: {
   imports = [inputs.flake-parts.flakeModules.nixpkgs];
   perSystem = {pkgs, self', ...}: {
-    packages.nushell = inputs.wrapper-modules.wrappers.nushell.wrap {
+    
+    packages.nushell =
+    let
+      carapace_nu = pkgs.runCommand "carapace nu generator" {} ''
+        mkdir $out/
+        ${pkgs.nushell}/bin/nu -c '${pkgs.lib.getExe pkgs.carapace} _carapace nushell | save --force $"($env.out)/carapace.nu"'
+      '';
+
+      starship_nu = pkgs.runCommand "starship nu generator" {} ''
+        mkdir $out/
+        ${pkgs.nushell}/bin/nu -c '${pkgs.lib.getExe self'.packages.starship} init nu | save -f $"($env.out)/starship.nu"'
+      '';
+    in
+    inputs.wrapper-modules.wrappers.nushell.wrap {
       inherit pkgs;
       package = pkgs.nushell;
 
@@ -26,7 +39,8 @@
 
         $env.config.show_banner = false
 
-        source $"($nu.cache-dir)/carapace.nu"
+        source "${carapace_nu}/carapace.nu"
+        source "${starship_nu}/starship.nu"
       '';
     };
   };
