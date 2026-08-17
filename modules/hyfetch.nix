@@ -5,9 +5,10 @@
     self',
     ...
   }: {
-    packages.hyfetch = inputs.wrapper-modules.wrappers.hyfetch.wrap {
+      packages.hyfetch = inputs.wrapper-modules.wrappers.hyfetch.wrap {
       inherit pkgs;
       package = pkgs.hyfetch;
+      runtimePkgs = [ self'.packages.fastfetch ];
       settings = {
         preset = "lesbian";
         mode = "rgb";
