@@ -12,7 +12,7 @@
         general.import = ["${inputs.catppuccin.packages.${pkgs.system}.alacritty}/catppuccin-mocha.toml"];
         terminal.shell = {
           program = "${pkgs.lib.getExe self'.packages.nushell}";
-          args = ["-e" "${pkgs.lib.getExe self'.packages.hyfetch}"];
+          args = ["-e" "${pkgs.lib.getExe self'.packages.fastfetch}"];
         };
         env.SHELL = "${pkgs.lib.getExe self'.packages.nushell}";
         env.EDITOR = "${pkgs.lib.getExe self'.packages.helix}";
